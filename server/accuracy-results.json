@@ -1,0 +1,62 @@
+[
+  {
+    "question": "What is the effect of a mistake as to law?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "What is coercion?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "What is undue influence?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "What is fraud under the Contract Act?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "Which agreements are void for lack of consideration?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "What compensation is payable for breach of contract?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "Can a person of unsound mind make a contract?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "Who is competent to contract?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "When is a contract voidable?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "What happens when a penalty is stipulated in a contract?",
+    "retrieval": "PASS",
+    "answer": "PASS (cited)"
+  },
+  {
+    "question": "What is the capital of France?",
+    "retrieval": "-",
+    "answer": "PASS (refused)"
+  },
+  {
+    "question": "What is the punishment for murder?",
+    "retrieval": "-",
+    "answer": "PASS (refused)"
+  }
+]

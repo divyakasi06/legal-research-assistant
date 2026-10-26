@@ -3,7 +3,7 @@ import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import "./App.css";
 
-const API = "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function App() {
   const [query, setQuery] = useState("");
@@ -13,6 +13,7 @@ export default function App() {
   const [uploading, setUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
+  const isAdmin = window.location.hash === "#admin";
 
   const askQuestion = async (e) => {
     e.preventDefault();
@@ -119,7 +120,7 @@ export default function App() {
             <button type="submit" disabled={loading}>Ask</button>
           </form>
         </section>
-
+                    {isAdmin && (
         <section className="card">
           <h2>Upload a Legal Document</h2>
           <p className="hint">Admin only. Add a PDF (an Act, a judgment, a contract) to the knowledge base.</p>
@@ -141,6 +142,7 @@ export default function App() {
           </div>
           {uploadStatus && <div className="status">{uploadStatus}</div>}
         </section>
+                )}
       </main>
 
       <footer className="footer">
