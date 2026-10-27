@@ -6,6 +6,35 @@ const { GoogleGenAI } = require("@google/genai");
 const router = express.Router();
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
+// Models to try, in order. If the first is busy, the next one is used.
+const MODELS = ["gemini-3.1-flash-lite", "gemini-flash-latest"];
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// true when the error is a temporary Google problem (busy / rate limit)
+function isTemporary(err) {
+  const text = `${err.status || ""} ${err.message || ""}`;
+  return /503|429|500|UNAVAILABLE|RESOURCE_EXHAUSTED|overloaded|high demand/i.test(text);
+}
+
+// Try each model up to 3 times, waiting a bit longer each time
+async function generateWithRetry(prompt) {
+  let lastErr;
+  for (const model of MODELS) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        return await ai.models.generateContent({ model, contents: prompt });
+      } catch (err) {
+        lastErr = err;
+        console.error(`Gemini ${model} attempt ${attempt} failed:`, err.message);
+        if (!isTemporary(err)) throw err;
+        await sleep(attempt * 1500);
+      }
+    }
+  }
+  throw lastErr;
+}
+
 router.post("/", async (req, res) => {
   try {
     const { query } = req.body;
@@ -51,10 +80,7 @@ Question: ${query}
 
 Answer:`;
 
-    const result = await ai.models.generateContent({
-      model: "gemini-3.1-flash-lite",
-      contents: prompt,
-    });
+    const result = await generateWithRetry(prompt);
 
     res.json({
       query,
@@ -67,6 +93,11 @@ Answer:`;
     });
   } catch (err) {
     console.error("ASK ERROR:", err);
+    if (isTemporary(err)) {
+      return res.status(503).json({
+        error: "The AI service is busy right now. Please try again in a few seconds.",
+      });
+    }
     res.status(500).json({ error: err.message, cause: err.cause?.message });
   }
 });
